@@ -1,10 +1,13 @@
 import React from 'react';
 import styled from 'styled-components';
 
-const Post = () => {
+const Post = ({post}) => {
+    
     return(
         <Container>
-            <h1>I'm the post</h1>
+            <h1>{post.title}</h1>
+            <p>{post.content}</p>
+            <p>{post.createdAt}</p>
         </Container>
     ) 
 };
