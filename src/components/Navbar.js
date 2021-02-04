@@ -1,10 +1,14 @@
 import React from 'react';
 import styled from 'styled-components';
 
-const Navbar = () => {
+const Navbar = ({ users, getUsersPosts }) => {
     return(
     <Container>
-        <h1>I'm the navbar</h1>
+        {users.map((user, index) => {
+            return (
+            <h1 key={index} onClick={() => {getUsersPosts(index)}}>{user.name}</h1>
+            )
+        })}
     </Container>
     )
 };
@@ -14,7 +18,7 @@ const Container = styled.div`
     height: 50px;
     background-color: lightseagreen;
     display: flex;
-    justify-content: center;
+    justify-content: space-evenly;
     align-items: center;
 `;
 

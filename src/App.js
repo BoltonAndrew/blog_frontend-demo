@@ -2,29 +2,57 @@ import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import NavBar from './components/Navbar';
 import Post from './components/Post';
+import { fetchPosts, fetchUsers } from './utils/'
+import Form from './components/Form';
 
 const App = () => {
   const [posts, setPosts] = useState([]);
+  const [users, setUsers] = useState([]);
+  const [andysPosts, setAndysPosts] = useState([]);
+  const [user, setUser] = useState('');
+  const [title, setTitle] = useState('');
+  const [content, setContent] = useState('');
 
   useEffect(() => {
-    const fetchData = async () => {
-      const response = await fetch('http://localhost:5000/posts')
-      const data = await response.json();
-      console.log(data);
-      setPosts(data);
-    };
-    fetchData();
+    fetchPosts(setPosts);
+    fetchUsers(setUsers);
   },[]);
+
+  const getUsersPosts = async (index) => {
+    const response = await fetch(`http://localhost:5000/posts/${users[index]._id}`)
+    const data = await response.json();
+    setPosts(data);
+    setUser(users[index]);
+  }
+
+  const addPost = async (event) => {
+    event.preventDefault()
+    const response = await fetch(`http://localhost:5000/posts/${user._id}`, {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({
+        title: title,
+        content: content,
+        author: user._id
+      })
+    })
+
+    const data = response.json();
+    let temp = [...posts];
+    temp.push(data);
+    setPosts(temp);
+  }
 
   return (
     <Container>
-      <NavBar/>
-      <h1>My Blog</h1>
+      <NavBar users={users} getUsersPosts={getUsersPosts}/>
+      <h1>{!user && "Choose a user"}</h1>
       <PostContainer>
         {posts.map((post, index) => {
-          return <Post key={index} post={post}/>
+          return <Post key={index} post={post} />
         })}
       </PostContainer>
+      {user && <Form setTitle={setTitle} setContent={setContent} addPost={addPost}/>}
     </Container>
   );
 };
