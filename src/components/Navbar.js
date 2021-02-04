@@ -9,10 +9,13 @@ const Navbar = () => {
     )
 };
 
-const Container = styled.dev`
+const Container = styled.div`
     width: 100vw;
     height: 50px;
     background-color: lightseagreen;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 `;
 
 export default Navbar;
